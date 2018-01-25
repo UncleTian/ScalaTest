@@ -1,0 +1,13 @@
+Step to reproduce:
+IN CP: ADF sync to LSM should be ON.
+LSM: ADF Routing to ClearPar should be ON.
+ADF should be uploaded from CP and routed to LSM.
+1. login to CP with amittal, Test123$
+2. Navigate to Account maintenance and search US1L015752
+3. Edit Phone and fax for the entity.
+Expected result:
+1. LSM Trade Account Maintenance field Phone to be edited
+2. After 5 min ADF should move in unpublished changes section in LSM.
+Actual result:
+ADF do not move to unpublished changes section.
+Attached screen shot.
