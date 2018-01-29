@@ -1,6 +1,7 @@
 package com.lin.luo.tian.practise.chapter9
 
 import java.io.{File, FileWriter, PrintWriter}
+import java.util.stream.Collectors
 
 import scala.collection.mutable.ArrayBuffer
 import scala.io.Source
@@ -8,24 +9,69 @@ import scala.io.Source
 object FileTest {
 
   def main(args: Array[String]): Unit = {
-//    val str = "<img src=\"/otn/resources/images/loading.gif\" alt=\"\" />"
-//    val imgPattern = """(<img.+src=")(.+)("\s+alt.+)""".r
-//    var imgPattern(grp0, grp1, grp2) = str
-//
-//    println(grp1)
-    exe10
+    exe11
   }
-  def exe10 : Unit = {
+
+  def exe13 : Unit = {
+    val array = Array("Hello", "World")
+    val flatArray = array.map(_.split("").toList).flatten
+    val flatArray2 = array.map(_.split("").toList).flatMap((x) => x)
+    flatArray2.foreach(println(_))
+  }
+
+  def exe12 : Unit = {
+    var li= List(1,2,3,4)
+    var res = li.flatMap(x => List(x*x))
+    println(res)
+  }
+
+  def exe11: Unit = {
+    val directoryPath = "D:\\TestFiles"
+    var direcotry = new File(directoryPath)
+
+    var dirs = subdirs(direcotry)
+    var count = 0;
+    dirs.foreach(f => println(f.getName))
+
+    println(count)
+
+    println(getClassFiles(direcotry))
+  }
+
+  def countFiles(dir : File) : Int = {
+    dir.listFiles().filter((f) => f.getName.endsWith(".class")).length
+  }
+
+  //count class files under given directory
+  def getClassFiles(file : File) : Int = {
+    var count = 0
+    if (file.isDirectory) {
+      file.listFiles().foreach(f => count += getClassFiles(f))
+    } else if(file.getName.endsWith(".class")) {
+      count += 1
+    }
+
+    count
+  }
+
+  def subdirs(dir : File) : Iterator[File] = {
+    val  children = dir.listFiles().filter(_.isDirectory)
+    children.toIterator ++ children.toIterator.flatMap(subdirs _)
+  }
+
+  def exe10: Unit = {
     var webPage = Source.fromURL("http://www.sina.com.cn/").mkString
     val imgPattern = """(<img.+src=")(.+)("\s+alt.+)""".r
     val srcList = new ArrayBuffer[String]
     for (imgPattern(g1, g2, g3) <- imgPattern.findAllIn(webPage)) srcList += g2
 
-    srcList.foreach((img) => {println(img)})
+    srcList.foreach((img) => {
+      println(img)
+    })
     //println(webPage)
   }
 
-  def exe9(n : Int) : Unit = {
+  def exe9(n: Int): Unit = {
     for (i <- 0 to n) println("%-10d%-10.5f".format(math.pow(2, i).toInt, 1.0 / Math.pow(2, i)))
   }
 
@@ -33,13 +79,13 @@ object FileTest {
     var source = Source.fromFile("myfile3.txt").mkString
     val floatPattern = "[0-9]+.[0-9]+".r
     val values = floatPattern.findAllIn(source).toArray
-    var doubleValues : Array[Double] = values.map(_.toDouble)
+    var doubleValues: Array[Double] = values.map(_.toDouble)
     println(doubleValues.size)
 
     println("sum = " + doubleValues.sum)
     println("max = " + doubleValues.max)
     println("min = " + doubleValues.min)
-    println("avg = " + doubleValues.sum/doubleValues.size)
+    println("avg = " + doubleValues.sum / doubleValues.size)
   }
 
   def exe7 = {
